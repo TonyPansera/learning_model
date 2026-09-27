@@ -1,0 +1,10 @@
+{
+  "name": "@learn/visual-tools",
+  "version": "0.2.0",
+  "description": "Render dependencies for .claude/scripts/viz.mjs (mermaid-maker / svg-maker subagents).",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@mermaid-js/mermaid-cli": "^11.4.2"
+  }
+}

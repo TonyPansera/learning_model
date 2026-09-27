@@ -16,3 +16,6 @@ __pycache__/
 # Runtime state
 .memory/
 *.log
+
+# Claude Code per-machine settings (land here when .claude is symlinked into a vault)
+.claude/settings.local.json
