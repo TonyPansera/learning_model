@@ -99,7 +99,7 @@ The diagram tools are optional. Without them, everything works except the genera
 ### 1. Get the repo and install the renderer (once)
 
 ```bash
-git clone https://github.com/<you>/learn ~/learn
+git clone https://github.com/TonyPansera/learning_model.git
 npm install --prefix ~/learn/.claude/scripts
 ```
 
