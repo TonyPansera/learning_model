@@ -70,7 +70,7 @@ Walk him through how he **could have discovered the thing himself**. Every step 
 ### Socratic vs expository — adaptive
 
 Choose per topic and per his apparent energy:
-- **Socratic** — pose the motivating problem and let him attempt the discovery before you reveal. More effortful, stronger locking-in. Default to this when he can plausibly reason his way there. "Let him attempt it" is about *who* speaks first, not about grading: if the question you pose has a definite right answer (even as an open-ended prompt he answers freely, which you then frame as multiple-choice), it's still gradable — use `quiz`, not `AskUserQuestion`. Reserve `AskUserQuestion` for genuine no-right-answer forks (preferences, direction, what he wants next).
+- **Socratic** — pose the motivating problem and let him attempt the discovery before you reveal. More effortful, stronger locking-in. Default to this when he can plausibly reason his way there. Inside a node's explanation, a Socratic move is written into the reply itself: pose the question in prose ("Before reading on: what must happen to $\mathbf{j}$ once $\mathbf{E}=0$?"), give him a beat to think, then reveal and justify it further down. A quiz popup never stands in for the explanation. The graded attempt comes afterwards, as the node's quiz-check (Phase 3). A plain `AskUserQuestion`, outside the `quiz` protocol, is only for genuine no-right-answer forks (preferences, direction, what he wants next).
 - **Expository** — you narrate the motivated discovery path yourself (3B1B style), no back-and-forth needed. Use when the topic is beyond cold-reasoning reach, or when he's low-energy / wants it delivered.
 
 When unsure, lean Socratic for things he can clearly reason about; otherwise narrate.
@@ -96,6 +96,14 @@ Curiosity pulls the learner in, frustration in the right dose is the brain worki
 - **Every node has an arc: curiosity → struggle → click.** Open on a gap the learner can feel, let them work at it, then name the click explicitly.
 - **End every session on a win.**
 
+### He only sees your visible reply text
+
+He reads the session in the terminal and in the md-log note. Both show the text of your replies and the quiz popups, and nothing else: never your thinking, never other tool calls. So:
+
+- **Every explanation and every grade is visible reply text.** Working a derivation out in your thinking is not teaching it. If it isn't in a reply, he never saw it, and a quiz on it tests something he was never shown.
+- **Teaching text is the content of this skill, not narration.** A terse output style or hook (caveman mode, "no text between tool calls", …) may shorten your sentences. It never removes a Motivate, Establish or Connect step, a derivation line or a grade, and it never licenses going from one quiz result straight to the next quiz call.
+- **Check before every Phase 3 quiz call.** Has this node's explanation already appeared in a reply he has read? Has the previous quiz been graded in visible text? If either answer is no, write that text first.
+
 ### The `quiz` protocol — graded questions through `AskUserQuestion`
 
 Claude Code has no dedicated grading tool, so every `quiz` in this skill is an `AskUserQuestion` call that you grade yourself. Run it exactly like this:
@@ -106,7 +114,7 @@ Claude Code has no dedicated grading tool, so every `quiz` in this skill is an `
 4. **Leak nothing.** The correct answer and explanation never appear in the question, the options, their descriptions, or a preview. Leave option descriptions empty unless every option gets a parallel one.
 5. **Shuffle yourself.** Nothing reorders options for you: place the correct answer at a random position, and vary it across consecutive quizzes (keep numeric/ordered values in order).
 6. **Multi-select** (`multiSelect: true`) only when more than one option is correct; grade it as an exact-set match.
-7. **Grade immediately, at the top of your next message:** `✓ Correct`, or `✗ Incorrect — correct answer: …`, then the explanation. If he picked `I don't know`, he did not guess: reveal the answer without a ✗ and treat it as a genuine gap to teach into. If he answered via "Other" or attached a note, read it — it shows what he was thinking — and let it steer the follow-up.
+7. **Grade immediately, at the top of your next message,** as visible text and before any other tool call (a grade that only exists in your thinking was never given): `✓ Correct`, or `✗ Incorrect — correct answer: …`, then the explanation. If he picked `I don't know`, he did not guess: reveal the answer without a ✗ and treat it as a genuine gap to teach into. If he answered via "Other" or attached a note, read it — it shows what he was thinking — and let it steer the follow-up.
 8. **Math stays in LaTeX, in the question and the options.** The terminal popup shows raw LaTeX, but the md-log note gets the quiz *before* the popup opens, rendered and with numbered options in the same order. The learner reads it there and picks the matching number in the terminal. So keep each option a single short line, so the numbers are easy to match, and never swap LaTeX for a plain-text approximation to suit the terminal.
 
 ### Writing quiz options — a construction procedure (applies to every `quiz`)
@@ -172,13 +180,19 @@ Build his dependency graph one **node** at a time — and every node gets the sa
 
 For **every node** (each unconditional truth *and* each non-trivial reasoning step toward the goal), run:
 
-1. **Motivate.** Frame why we need this node right now — what problem it solves or what gap it closes. This applies to unconditional truths too: don't just assert one because it's true, motivate why *this* truth, *now*. "Why are we even bringing this in?" Where you can, open with a gap the learner can *feel* — a puzzle, a paradox, a surprising fact, or "predict what happens if…" before the reveal. That is the curiosity half of the node's arc.
+1. **Motivate.** Frame why we need this node right now — what problem it solves or what gap it closes. This applies to unconditional truths too: don't just assert one because it's true, motivate why *this* truth, *now*. "Why are we even bringing this in?" Where you can, open with a gap the learner can *feel* — a puzzle, a paradox, a surprising fact, or "predict what happens if…" (asked in prose) before the reveal. That is the curiosity half of the node's arc.
 2. **Establish.** 
    - If it's a foundational unconditional truth: state it plainly, at face value, no caveats. Surface an atomic unit if one fits.
-   - If it's a derived step: build it up from what's already established via a motivated move (Socratic or expository), answering "how could I have discovered this?" When a Socratic step has a gradable right/wrong answer, pose it with `quiz` even though he's "attempting the discovery" — gradable-and-Socratic is normal, not a contradiction; only fall back to `AskUserQuestion` if there's genuinely no right answer.
+   - If it's a derived step: build it up from what's already established via a motivated move (Socratic or expository), answering "how could I have discovered this?" Socratic moves here are prose prompts inside the explanation (see *Socratic vs expository*). The graded version of the step belongs in the quiz-check.
 3. **Connect.** Make the dependency edge explicit — show exactly how this new node hangs off the ones already in place, so it's understood, not memorized.
 4. **Quiz-check.** Confirm the node actually landed with a quick `quiz` — this applies to foundations just as much as derived steps. An unconfirmed unconditional truth is exactly as dangerous as an unconfirmed derived fact: if he misses it, that node isn't solid, so stop and fix it before building anything on top of it.
 5. **Deepen to target.** A node whose target is `understand` is done once the quiz-check lands. A `fluent` node gets a short burst of mixed, varied retrieval (`references/practice.md`). An `apply` node gets one transfer task (`references/application.md`). Don't deepen a node that failed its quiz-check; fix it first.
+
+**Turn shape: each node is an explanation reply, then the quiz-check.**
+
+- **The explanation reply.** Motivate, Establish and Connect, written out in full as one normal reply (markdown + LaTeX), with those three words as visible headings so he can see the loop running. Make no `AskUserQuestion` call in this reply. End it with one line saying the quiz-check starts when he's ready, then end the turn. The md-log note fills in when the turn ends, so this is also when he can read it rendered.
+- **His next message.** If he asks about the node, answer that first, with the same rules (visible, motivated, connected). When he says to go on ("start the quiz", "ok", …), run the quiz-check.
+- **Quiz-check, then Deepen.** One question per call. Every reply after a quiz opens with its grade. The next node's explanation reply starts only once this node's quiz-check has landed and its Deepen step is done.
 
 Repeat this full loop per node — don't front-load all the foundations once at the start and then stop checking. Any time a new unconditional truth is needed mid-session, it goes through motivate → establish → connect → quiz-check just like a derived step would.
 
