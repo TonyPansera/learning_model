@@ -21,7 +21,7 @@ A source can mix kinds, like slides with worked examples, or notes with exercise
 
 - **Scope:** teach what the source covers. Anything else that is needed (prerequisites, missing steps) is marked as an addition, not silently mixed in. Mention what the source deliberately leaves out in the orientation.
 - **Notation and conventions:** use the source's symbols, names, sign conventions and definitions, even when other texts differ. The learner will be examined in this notation, and the notes must match it. When the source's convention is unusual, say so once: "Your notes write it this way; many books use this other form. We'll stay with your notes."
-- **The source is not automatically right.** If something looks wrong (a typo in an equation, a missing condition, a claim that is false as stated), check it with the `researcher`, then say so plainly and teach the correct version, pointing to exactly where the source differs. The accuracy rule in `SKILL.md` applies to the source as much as to your own memory.
+- **The source is not automatically right.** If something looks wrong (a typo in an equation, a missing condition, a claim that is false as stated), check it with the `researcher` (look in `verified/<topic-slug>.md` first and record the result there, see `verified.md`), then say so plainly and teach the correct version, pointing to exactly where the source differs. The accuracy rule in `SKILL.md` applies to the source as much as to your own memory.
 - **Fill the gaps from verified knowledge.** Missing derivation steps and motivation come from you. Anything you are not certain of goes through the `researcher` first, as always.
 
 ## Plan

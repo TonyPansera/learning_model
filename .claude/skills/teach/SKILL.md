@@ -79,7 +79,7 @@ When unsure, lean Socratic for things he can clearly reason about; otherwise nar
 
 The two principles are *how* you teach. This is *when* — the shape of a teaching session. Run all three phases in order, every time; scale each phase's *size* to the topic, never its *shape*.
 
-**Accuracy is non-negotiable — verify, don't wing it from memory.** He has to be able to trust the teacher completely; one confidently-delivered hallucination poisons that. Working from memory alone is where LLMs invent things, so: **the moment you are even slightly unsure of any fact, name, date, formula, definition, or claim, stop and confirm it with a quick `researcher` subagent (Agent tool, `subagent_type: "researcher"`) before you say it.** Pausing to verify is always acceptable — accuracy beats flow, every time. And if a check changes or corrects what you were about to teach, say so plainly rather than quietly papering over it. A wrong unconditional truth or a wrong "discovered" step doesn't just mislead — it corrupts every node built on top of it.
+**Accuracy is non-negotiable — verify, don't wing it from memory.** He has to be able to trust the teacher completely; one confidently-delivered hallucination poisons that. Working from memory alone is where LLMs invent things, so: **the moment you are even slightly unsure of any fact, name, date, formula, definition, or claim, stop and confirm it with a quick `researcher` subagent (Agent tool, `subagent_type: "researcher"`) before you say it.** Pausing to verify is always acceptable — accuracy beats flow, every time. The `researcher` has no memory, so keep it in `verified/<topic-slug>.md` (`references/verified.md`): look a fact up there before calling the `researcher`, and record each result right after the call. And if a check changes or corrects what you were about to teach, say so plainly rather than quietly papering over it. A wrong unconditional truth or a wrong "discovered" step doesn't just mislead — it corrupts every node built on top of it.
 
 ### Source material — slides, lecture notes, book pages, exercises
 
@@ -132,7 +132,7 @@ If, reading the finished set cold, you can still tell which is right without kno
 
 You can't teach into his zone of proximal development without knowing where its edges are, and you can't aim the teaching without knowing what he's actually reaching for. Two separate unknowns, two separate tools — keep the boundary clean:
 
-**Returning topic? Read `progress/<topic-slug>.md` first** (format in `references/practice.md`). Its `reached` column tells you what not to re-teach; its errors column tells you which misconceptions to probe first. Probe to confirm, since memory fades. Don't trust the file blindly. Also read `notes/<topic-slug>.md` if it exists: it shows how each node was framed last time, so the new session builds on the same words and map.
+**Returning topic? Read `progress/<topic-slug>.md` first** (format in `references/practice.md`). Its `reached` column tells you what not to re-teach; its errors column tells you which misconceptions to probe first. Probe to confirm, since memory fades. Don't trust the file blindly. Also read `notes/<topic-slug>.md` if it exists: it shows how each node was framed last time, so the new session builds on the same words and map. Also read `verified/<topic-slug>.md` if it exists (format and reuse rules in `references/verified.md`): it lists the facts a `researcher` already checked, so you don't pay for the same search twice.
 
 **1a. His current level — use `quiz`. This is a mapping job, not a spot-check.** Your goal is to locate the *edge* of his understanding — the frontier where what he reliably knows turns into what he doesn't — along every strand the planned lesson will depend on. Until you've actually found that edge, you cannot teach into it, so this phase gets as long and detailed as it needs to be. There is no rush.
 
@@ -156,7 +156,7 @@ Part of the goal is the **target depth**: ask it as its own `AskUserQuestion`, w
 
 This is the highest-leverage step; don't rush it. With his level and his goal now in hand, stop and genuinely reason out the best way to teach *this thing* to *this person*. Re-read the philosophy above and plan against it:
 
-- **Scope the field first with a `researcher` subagent.** Before planning the graph, fire a quick researcher to map the topic — its core concepts, the real first principles, standard framings, common gotchas. This both refreshes your grip on the subject and surfaces the genuine unconditional truths so you don't plan around a half-remembered version. Cheap, and it makes the whole plan more accurate.
+- **Scope the field first with a `researcher` subagent.** Before planning the graph, fire a quick researcher to map the topic — its core concepts, the real first principles, standard framings, common gotchas. This both refreshes your grip on the subject and surfaces the genuine unconditional truths so you don't plan around a half-remembered version. Cheap, and it makes the whole plan more accurate. On a returning topic, read `verified/<topic-slug>.md` first and scan only what it doesn't cover yet. Write the scan and every fact it settles into that file (`references/verified.md`) before planning.
 - What are the unconditional truths this rests on? Is there a clean atomic unit ("ALL X is done through {____}")?
 - Which of those does he already hold (from Phase 1a)? Build from there — not below it, not above it.
 - What's the motivated discovery path from those truths to his goal? Where does each step come from — why would anyone reach for it?
@@ -205,7 +205,8 @@ Whenever the session ends (the goal is reached, the learner wants to stop, or fa
 1. **End on a win.** Finish with something the learner gets right: a consolidating quiz on a node just mastered, or a recap showing what now connects to what.
 2. **Write the progress file.** Create or update `progress/<topic-slug>.md` in the format given in `references/practice.md`. Record every node touched: target, reached, box and due dates for nodes entering spaced practice, and the exact misconceptions that showed up. This is the only memory the next session has.
 3. **Write the notes and session report.** Create or update `notes/<topic-slug>.md` following `references/notes.md`: a clean course sheet of what was taught (map, one section per node, common traps from the learner's actual mistakes), plus a dated report for this session at the bottom. The md-log file is the transcript; this is what the learner rereads.
-4. **Point to the next step.** Say when the first review is due and that `/review` runs it, and name the next node on the map.
+4. **Check the verified file.** Confirm `verified/<topic-slug>.md` holds every fact a `researcher` settled this session, with sources (format in `references/verified.md`). Entries are written right after each call; this is the last check that none was missed. Any `corrected` fact the learner fell for also goes in the progress errors column and the notes' **Common traps**.
+5. **Point to the next step.** Say when the first review is due and that `/review` runs it, and name the next node on the map.
 
 ## Formatting — math renders as LaTeX
 
