@@ -50,7 +50,7 @@ It covers the **four aspects of learning** as far as your goal needs:
 
 It also manages **pacing**. It aims for about 80% success, eases off after two misses in a row, speeds up when things are too easy, opens each concept on a puzzle, and always ends on a win.
 
-Facts are checked by a researcher agent before they are taught, whenever there is any doubt.
+Facts are checked by a researcher agent before they are taught, whenever there is any doubt. The researcher has no memory of its own, so every fact it checks is saved with its sources in `verified/<topic>.md`. Later sessions look there first and only search the web for what is missing, so a fact is checked once and taught the same way every time.
 
 ---
 
@@ -62,7 +62,7 @@ Everything that runs lives in `.claude/`, which you link into your vault:
 .claude/
 ├── skills/
 │   ├── teach/              the teaching method (SKILL.md) + references/
-│   │   └── references/     pacing, practice, application, notes, sources
+│   │   └── references/     pacing, practice, application, notes, sources, verified
 │   ├── review/             /review: spaced-repetition sessions
 │   ├── visualize/          adds a verified diagram when a picture helps
 │   ├── md-log/             /md-log: mirror the session into a note
@@ -295,6 +295,8 @@ learning/
 │   └── tcp.md          clean course sheet + session reports ← reread this one
 ├── progress/
 │   └── tcp.md          mastery table + review schedule
+├── verified/
+│   └── tcp.md          facts the researcher checked, with sources
 ├── sources/
 │   └── lecture-2.pdf   your own material (optional)
 └── viz/
@@ -304,6 +306,7 @@ learning/
 - **`lessons/`** holds the full conversation in order: explanations, quizzes, your answers, detours. Keep it as a record.
 - **`notes/<topic>.md`** is the file to reread. It has the dependency map, one clean section per concept, a **Common traps** section built from your actual mistakes, and a short dated report for every lesson and review. It is updated in place every session, so it grows into a full course.
 - **`progress/<topic>.md`** is a table with columns `node | target | reached | box | last | due | errors`. `/review` uses it to schedule reviews. You can read it, but you don't need to edit it.
+- **`verified/<topic>.md`** is the researcher's memory: one entry per checked fact, with its status (`confirmed`, `corrected` or `open`), the claim as taught, the source links and the date. A `corrected` entry also records the wrong version, so you can see what was caught. It is written as soon as each check finishes, so it survives a session that is closed early. Your own notes and progress files never depend on it, so it is safe to delete, but the facts will then be checked again.
 
 ---
 
@@ -362,6 +365,7 @@ The teaching method is plain text: edit it to fit how you learn. Changes apply f
 | Application tasks | `.claude/skills/teach/references/application.md` |
 | Course-sheet and report format | `.claude/skills/teach/references/notes.md` |
 | Handling of slides, notes, books | `.claude/skills/teach/references/sources.md` |
+| Saved fact checks (format, when to reuse or re-check) | `.claude/skills/teach/references/verified.md` |
 | Review sessions | `.claude/skills/review/SKILL.md` |
 | Models used by the agents | the `model:` line in `.claude/agents/*.md` |
 
